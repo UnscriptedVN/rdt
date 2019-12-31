@@ -5,7 +5,7 @@ description = "Making Ren'Py distribution less of a pain in the arse"
 authors = ["Marquis Kurt <software@marquiskurt.net>"]
 
 [tool.poetry.dependencies]
-python = "^3.5"
+python = ">=3.5"
 
 [tool.poetry.dev-dependencies]
 pytest = "^4.6"
