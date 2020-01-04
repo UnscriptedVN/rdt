@@ -53,7 +53,14 @@ def code_sign(identity: str,
     :param app_directory: The path to the macOS application for signing
     :param entitlements: (Optional) The path to the entitlements the app should be signed with
     """
-    commands = ["codesign", "--timestamp", "--deep", "--force", "--sign", identity, app_directory]
+    commands = ["codesign",
+                "--timestamp",
+                "--deep",
+                "--force",
+                "--no-strict",
+                "--sign",
+                identity,
+                app_directory]
 
     if entitlements is not None:
         commands.append("--entitlements")
