@@ -1,8 +1,12 @@
+"""
+    This module contains a customized version of the `ZipFile` object
+    to properly handle extraction of macOS apps so that permissions aren't
+    stripped.
+"""
 import os
 from zipfile import ZipFile, ZipInfo
 
 class MyZipFile(ZipFile):
-
     def extract(self, member, path=None, pwd=None):
         if not isinstance(member, ZipInfo):
             member = self.getinfo(member)

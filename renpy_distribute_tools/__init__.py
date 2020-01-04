@@ -1,10 +1,10 @@
-"""
-    Ren'Py Distribute Tools
-
-    This module contains all of the tools necessary to make Ren'Py
+"""This module contains all of the tools necessary to make Ren'Py
     visual novel distribution less of a hassle.
+
+The overall premise of this module is to provide utilities that make
+distribution of Ren'Py visual novels, particularly for macOS, easier.
 """
-__version__ = '0.2.1'
+__version__ = '0.2.2'
 
 from renpy_distribute_tools.fixed_zipfile import MyZipFile
 from renpy_distribute_tools.plist import fix_plist
