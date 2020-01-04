@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "renpy-distribute-tools"
-version = "0.2.0"
+version = "0.2.1"
 description = "Making Ren'Py distribution less of a pain in the arse"
 authors = ["Marquis Kurt <software@marquiskurt.net>"]
 
