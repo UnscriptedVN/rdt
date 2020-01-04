@@ -1,11 +1,12 @@
 [tool.poetry]
 name = "renpy-distribute-tools"
-version = "0.1.0"
+version = "0.2.0"
 description = "Making Ren'Py distribution less of a pain in the arse"
 authors = ["Marquis Kurt <software@marquiskurt.net>"]
 
 [tool.poetry.dependencies]
-python = ">=3.5"
+python = ">= 3.7"
+pylint = "^2.4.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^4.6"
