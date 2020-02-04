@@ -5,7 +5,21 @@
 """
 import os
 import subprocess
+from sys import platform
 
+def darwin_only(call):
+    """A decorator for macOS-specific commands.
+
+    This should be used to denote that a function only works on
+    macOS due to reliance on built-in tools from macOS or Xcode.
+    """
+    def darwin_call():
+        if platform.lower() != "darwin":
+            raise OSError("Function %s only works on macOS." % (call))
+        call()
+    return darwin_call
+
+@darwin_only
 def package_app_zip(app: str):
     """Create a ZIP file of the app.
 
@@ -18,7 +32,7 @@ def package_app_zip(app: str):
     else:
         raise NotADirectoryError("The .app file is either missing or not present.")
 
-
+@darwin_only
 def build_pkg(app: str, identity: str, package_name: str):
     """Create an installable package from a macOS app.
 
@@ -40,7 +54,7 @@ def build_pkg(app: str, identity: str, package_name: str):
                 "/Applications", "--sign", identity, package_file]
     return subprocess.check_call(commands)
 
-
+@darwin_only
 def code_sign(identity: str, 
               app_directory: str, 
               entitlements: str = None, 
@@ -70,7 +84,7 @@ def code_sign(identity: str,
 
     return subprocess.check_call(commands)
 
-
+@darwin_only
 def upload_to_notary(app: str, identifier: str, username: str, password: str, provider: str = None):
     """Upload a macOS application archive to Apple's notary service for notarization.
 
@@ -94,7 +108,7 @@ def upload_to_notary(app: str, identifier: str, username: str, password: str, pr
     subprocess.check_call(commands)
     os.remove(app + ".zip")
 
-
+@darwin_only
 def staple(app: str):
     """Staple a notarization ticket to a notarized app.
 
