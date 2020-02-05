@@ -1,8 +1,12 @@
 [tool.poetry]
 name = "renpy-distribute-tools"
-version = "0.2.3"
+version = "0.3.0"
 description = "Utilities that make Ren'Py distribution less of a pain in the arse"
 authors = ["Marquis Kurt <software@marquiskurt.net>"]
+homepage = "https://github.com/alicerunsonfeodra/renpy-distribute-tools"
+documentation = "https://marquiskurt.net/renpy-distribute-tools/"
+license = "MPL-2.0"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">= 3.7"

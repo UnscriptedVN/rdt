@@ -6,6 +6,7 @@
 import os
 import subprocess
 from sys import platform
+from functools import wraps
 
 def darwin_only(call):
     """A decorator for macOS-specific commands.
@@ -13,6 +14,7 @@ def darwin_only(call):
     This should be used to denote that a function only works on
     macOS due to reliance on built-in tools from macOS or Xcode.
     """
+    @wraps(call)
     def darwin_call():
         if platform.lower() != "darwin":
             raise OSError("Function %s only works on macOS." % (call))

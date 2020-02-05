@@ -36,6 +36,7 @@ building packages for macOS easier.</p>
 import os
 import subprocess
 from sys import platform
+from functools import wraps
 
 def darwin_only(call):
     &#34;&#34;&#34;A decorator for macOS-specific commands.
@@ -43,6 +44,7 @@ def darwin_only(call):
     This should be used to denote that a function only works on
     macOS due to reliance on built-in tools from macOS or Xcode.
     &#34;&#34;&#34;
+    @wraps(call)
     def darwin_call():
         if platform.lower() != &#34;darwin&#34;:
             raise OSError(&#34;Function %s only works on macOS.&#34; % (call))
@@ -157,33 +159,97 @@ def staple(app: str):
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="renpy_distribute_tools.apple.build_pkg"><code class="name flex">
-<span>def <span class="ident">build_pkg</span></span>(<span>)</span>
+<span>def <span class="ident">build_pkg</span></span>(<span>app, identity, package_name)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Create an installable package from a macOS app.</p>
+<p>By default, it will create an app package that installs to <code>/Applications/</code>.
+This package installer can also be used to submit an app to the Mac App Store.</p>
+<p>If the package name isn't a file path, <code>.pkg</code> will automatically be appended
+at the end of the name.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>app</code></strong></dt>
+<dd>The path to the app to create a package of.</dd>
+<dt><strong><code>identity</code></strong></dt>
+<dd>The identity to sign the package with</dd>
+<dt><strong><code>package_name</code></strong></dt>
+<dd>The name or path of the resulting package.</dd>
+</dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def darwin_call():
-    if platform.lower() != &#34;darwin&#34;:
-        raise OSError(&#34;Function %s only works on macOS.&#34; % (call))
-    call()</code></pre>
+<pre><code class="python">@darwin_only
+def build_pkg(app: str, identity: str, package_name: str):
+    &#34;&#34;&#34;Create an installable package from a macOS app.
+
+    By default, it will create an app package that installs to `/Applications/`.
+    This package installer can also be used to submit an app to the Mac App Store.
+
+    If the package name isn&#39;t a file path, `.pkg` will automatically be appended
+    at the end of the name.
+
+    Args:
+        app: The path to the app to create a package of.
+        identity: The identity to sign the package with
+        package_name: The name or path of the resulting package.
+    &#34;&#34;&#34;
+    package_file = package_name
+    if &#34;.pkg&#34; not in package_name:
+        package_file = package_name + &#34;.pkg&#34;
+    commands = [&#34;productbuild&#34;, &#34;--component&#34;, app,
+                &#34;/Applications&#34;, &#34;--sign&#34;, identity, package_file]
+    return subprocess.check_call(commands)</code></pre>
 </details>
 </dd>
 <dt id="renpy_distribute_tools.apple.code_sign"><code class="name flex">
-<span>def <span class="ident">code_sign</span></span>(<span>)</span>
+<span>def <span class="ident">code_sign</span></span>(<span>identity, app_directory, entitlements=None, enable_hardened_runtime=False)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Digitally sign a macOS application with a signing identity and any entitlements.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>identity</code></strong></dt>
+<dd>The identity to use during signing, usually a Developer ID</dd>
+<dt><strong><code>app_directory</code></strong></dt>
+<dd>The path to the macOS application for signing</dd>
+<dt><strong><code>entitlements</code></strong></dt>
+<dd>(Optional) The path to the entitlements the app should be signed with</dd>
+</dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def darwin_call():
-    if platform.lower() != &#34;darwin&#34;:
-        raise OSError(&#34;Function %s only works on macOS.&#34; % (call))
-    call()</code></pre>
+<pre><code class="python">@darwin_only
+def code_sign(identity: str, 
+              app_directory: str, 
+              entitlements: str = None, 
+              enable_hardened_runtime: bool = False):
+    &#34;&#34;&#34;Digitally sign a macOS application with a signing identity and any entitlements.
+
+    Args:
+        identity: The identity to use during signing, usually a Developer ID
+        app_directory: The path to the macOS application for signing
+        entitlements: (Optional) The path to the entitlements the app should be signed with
+    &#34;&#34;&#34;
+    commands = [&#34;codesign&#34;,
+                &#34;--timestamp&#34;,
+                &#34;--deep&#34;,
+                &#34;--force&#34;,
+                &#34;--no-strict&#34;,
+                &#34;--sign&#34;,
+                identity,
+                app_directory]
+
+    if entitlements is not None:
+        commands.append(&#34;--entitlements&#34;)
+        commands.append(entitlements)
+
+    if enable_hardened_runtime:
+        commands.append(&#34;--options=runtime&#34;)
+
+    return subprocess.check_call(commands)</code></pre>
 </details>
 </dd>
 <dt id="renpy_distribute_tools.apple.darwin_only"><code class="name flex">
@@ -203,6 +269,7 @@ macOS due to reliance on built-in tools from macOS or Xcode.</p></section>
     This should be used to denote that a function only works on
     macOS due to reliance on built-in tools from macOS or Xcode.
     &#34;&#34;&#34;
+    @wraps(call)
     def darwin_call():
         if platform.lower() != &#34;darwin&#34;:
             raise OSError(&#34;Function %s only works on macOS.&#34; % (call))
@@ -211,48 +278,104 @@ macOS due to reliance on built-in tools from macOS or Xcode.</p></section>
 </details>
 </dd>
 <dt id="renpy_distribute_tools.apple.package_app_zip"><code class="name flex">
-<span>def <span class="ident">package_app_zip</span></span>(<span>)</span>
+<span>def <span class="ident">package_app_zip</span></span>(<span>app)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Create a ZIP file of the app.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>app</code></strong></dt>
+<dd>The path to the macOS to make an archive of</dd>
+</dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def darwin_call():
-    if platform.lower() != &#34;darwin&#34;:
-        raise OSError(&#34;Function %s only works on macOS.&#34; % (call))
-    call()</code></pre>
+<pre><code class="python">@darwin_only
+def package_app_zip(app: str):
+    &#34;&#34;&#34;Create a ZIP file of the app.
+
+        Args:
+            app: The path to the macOS to make an archive of
+    &#34;&#34;&#34;
+    if os.path.isdir(app):
+        zip_commands = [&#34;ditto&#34;, &#34;-c&#34;, &#34;-k&#34;, &#34;--rsrc&#34;, &#34;--keepParent&#34;, app, app + &#34;.zip&#34;]
+        subprocess.check_call(zip_commands)
+    else:
+        raise NotADirectoryError(&#34;The .app file is either missing or not present.&#34;)</code></pre>
 </details>
 </dd>
 <dt id="renpy_distribute_tools.apple.staple"><code class="name flex">
-<span>def <span class="ident">staple</span></span>(<span>)</span>
+<span>def <span class="ident">staple</span></span>(<span>app)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Staple a notarization ticket to a notarized app.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>app</code></strong></dt>
+<dd>The path of the macOS app to staple the ticket to.</dd>
+</dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def darwin_call():
-    if platform.lower() != &#34;darwin&#34;:
-        raise OSError(&#34;Function %s only works on macOS.&#34; % (call))
-    call()</code></pre>
+<pre><code class="python">@darwin_only
+def staple(app: str):
+    &#34;&#34;&#34;Staple a notarization ticket to a notarized app.
+
+    Args:
+        app: The path of the macOS app to staple the ticket to.
+    &#34;&#34;&#34;
+    commands = [&#34;xcrun&#34;, &#34;stapler&#34;, &#34;staple&#34;, app]
+    return subprocess.check_call(commands)</code></pre>
 </details>
 </dd>
 <dt id="renpy_distribute_tools.apple.upload_to_notary"><code class="name flex">
-<span>def <span class="ident">upload_to_notary</span></span>(<span>)</span>
+<span>def <span class="ident">upload_to_notary</span></span>(<span>app, identifier, username, password, provider=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Upload a macOS application archive to Apple's notary service for notarization.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>app</code></strong></dt>
+<dd>The path to the macOS application to send to Apple.</dd>
+<dt><strong><code>identifier</code></strong></dt>
+<dd>The bundle identifier of the application.</dd>
+<dt><strong><code>username</code></strong></dt>
+<dd>The username (email address) of the Apple ID to notarize under.</dd>
+<dt><strong><code>password</code></strong></dt>
+<dd>The password of the Apple ID to notarize under.</dd>
+<dt><strong><code>provider</code></strong></dt>
+<dd>(Optional) The App Store Connect or iTunes Connect provider</dd>
+</dl>
+<p>associated with the Apple ID.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def darwin_call():
-    if platform.lower() != &#34;darwin&#34;:
-        raise OSError(&#34;Function %s only works on macOS.&#34; % (call))
-    call()</code></pre>
+<pre><code class="python">@darwin_only
+def upload_to_notary(app: str, identifier: str, username: str, password: str, provider: str = None):
+    &#34;&#34;&#34;Upload a macOS application archive to Apple&#39;s notary service for notarization.
+
+    Args:
+        app: The path to the macOS application to send to Apple.
+        identifier: The bundle identifier of the application.
+        username: The username (email address) of the Apple ID to notarize under.
+        password: The password of the Apple ID to notarize under.
+        provider: (Optional) The App Store Connect or iTunes Connect provider
+    associated with the Apple ID.
+    &#34;&#34;&#34;
+    package_app_zip(app)
+    commands = [&#34;xcrun&#34;, &#34;altool&#34;, &#34;-t&#34;, &#34;osx&#34;, &#34;-f&#34;, app + &#34;.zip&#34;,
+                &#34;--notarize-app&#34;, &#34;--primary-bundle-id&#34;, identifier,
+                &#34;-u&#34;, username, &#34;-p&#34;, password]
+
+    if provider is not None:
+        commands.append(&#34;-itc_provider&#34;)
+        commands.append(provider)
+
+    subprocess.check_call(commands)
+    os.remove(app + &#34;.zip&#34;)</code></pre>
 </details>
 </dd>
 </dl>

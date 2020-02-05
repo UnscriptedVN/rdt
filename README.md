@@ -2,21 +2,36 @@
 
 A set of tools to make Ren'Py distribution less of a pain in the arse.
 
-## Add to Poetry
+## Installing `renpy-distribute-tools`
 
-Run the following to add this module to your Poetry project:
+To install via PyPI:
 
 ```
-poetry add --dev "git+https://github.com/alicerunsonfedora/renpy-distribute-tools.git#v0.2.2"
+pip install renpy-distribute-tools
 ```
 
-Or, in your `pyproject.toml` in `[tool.poetry.dev-dependencies]`:
+Or, if you're using a Poetry project, just add the dependency:
 
-```toml
-renpy-distribute-tools = { git = "https://github.com/alicerunsonfedora/renpy-distribute-tools.git", rev = "v0.2.2" }
+```
+poetry add renpy-distribute-tools
 ```
 
-Then run `poetry update`.
+## Building from source
+
+Ren'Py Distribute Tools is a Poetry project and can be built using Poetry's `build` command.
+
+1. Clone the repository.
+2. In the root of the project, run `poetry install`.
+3. Finally, run `poetry build`.
+
+## What's included
+
+The Ren'Py Distribution Tools set comes with utilities that make it easy to do the following:
+
+- Modifying a visual novel's `Info.plist`.
+- Code-signing the visual novel binaries in the Mac app with entitlements.
+- Creating a ZIP copy of the Mac app and sending it to Apple's notarization servers.
+- Stapling the notarization ticket to a macOS app.
 
 ## Usage
 
