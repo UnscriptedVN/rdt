@@ -5,7 +5,7 @@ description = "Utilities that make Ren'Py distribution less of a pain in the ars
 authors = ["Marquis Kurt <software@marquiskurt.net>"]
 homepage = "https://github.com/alicerunsonfeodra/renpy-distribute-tools"
 documentation = "https://marquiskurt.net/renpy-distribute-tools/"
-license = "MPL-2.0"
+license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]

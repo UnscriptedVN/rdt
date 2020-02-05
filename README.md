@@ -2,6 +2,9 @@
 
 A set of tools to make Ren'Py distribution less of a pain in the arse.
 
+[![MPL](https://img.shields.io/github/license/alicerunsonfedora/ocellusscript)](LICENSE.txt) 
+![Python](https://img.shields.io/badge/python-3.7+-blue.svg) 
+
 ## Installing `renpy-distribute-tools`
 
 To install via PyPI:
