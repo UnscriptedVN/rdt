@@ -45,10 +45,10 @@ def darwin_only(call):
     macOS due to reliance on built-in tools from macOS or Xcode.
     &#34;&#34;&#34;
     @wraps(call)
-    def darwin_call():
+    def darwin_call(*args, **kwargs):
         if platform.lower() != &#34;darwin&#34;:
             raise OSError(&#34;Function %s only works on macOS.&#34; % (call))
-        call()
+        call(*args, **kwargs)
     return darwin_call
 
 @darwin_only
@@ -87,9 +87,9 @@ def build_pkg(app: str, identity: str, package_name: str):
     return subprocess.check_call(commands)
 
 @darwin_only
-def code_sign(identity: str, 
-              app_directory: str, 
-              entitlements: str = None, 
+def code_sign(identity: str,
+              app_directory: str,
+              entitlements: str = None,
               enable_hardened_runtime: bool = False):
     &#34;&#34;&#34;Digitally sign a macOS application with a signing identity and any entitlements.
 
@@ -222,9 +222,9 @@ def build_pkg(app: str, identity: str, package_name: str):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@darwin_only
-def code_sign(identity: str, 
-              app_directory: str, 
-              entitlements: str = None, 
+def code_sign(identity: str,
+              app_directory: str,
+              entitlements: str = None,
               enable_hardened_runtime: bool = False):
     &#34;&#34;&#34;Digitally sign a macOS application with a signing identity and any entitlements.
 
@@ -270,10 +270,10 @@ macOS due to reliance on built-in tools from macOS or Xcode.</p></section>
     macOS due to reliance on built-in tools from macOS or Xcode.
     &#34;&#34;&#34;
     @wraps(call)
-    def darwin_call():
+    def darwin_call(*args, **kwargs):
         if platform.lower() != &#34;darwin&#34;:
             raise OSError(&#34;Function %s only works on macOS.&#34; % (call))
-        call()
+        call(*args, **kwargs)
     return darwin_call</code></pre>
 </details>
 </dd>
