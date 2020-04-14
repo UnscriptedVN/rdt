@@ -3,8 +3,8 @@ name = "renpy-distribute-tools"
 version = "0.3.1"
 description = "Utilities that make Ren'Py distribution less of a pain in the arse"
 authors = ["Marquis Kurt <software@marquiskurt.net>"]
-homepage = "https://github.com/alicerunsonfeodra/renpy-distribute-tools"
-documentation = "https://marquiskurt.net/renpy-distribute-tools/"
+homepage = "https://github.com/UnscriptedVN/rdt"
+documentation = "https://unscriptedvn.github.io/rdt/"
 license = "MIT"
 readme = "README.md"
 
