@@ -38,4 +38,4 @@ The Ren'Py Distribution Tools set comes with utilities that make it easy to do t
 
 ## Usage
 
-See the [documentation](https://alicerunsonfedora.github.io/renpy-distribute-tools) for more info.
+See the [documentation](https://unscriptedvn.github.io/rdt) for more info.
