@@ -77,7 +77,7 @@ from renpy_distribute_tools.fixed_zipfile import MyZipFile
 from renpy_distribute_tools.plist import fix_plist
 from renpy_distribute_tools.apple import package_app_zip, \
     upload_to_notary, build_pkg, staple, code_sign
-from renpy_distribute_tools.util import file_exists, find_mac_build, verify_built_files</code></pre>
+from renpy_distribute_tools.util import deprecated, file_exists, find_mac_build, verify_built_files</code></pre>
 </details>
 </section>
 <section>
@@ -93,6 +93,11 @@ building packages for macOS easier …</p></section>
 <section class="desc"><p>This module contains a customized version of the <code>ZipFile</code> object
 to properly handle extraction of macOS apps so that permissions aren't
 stripped.</p></section>
+</dd>
+<dt><code class="name"><a title="renpy_distribute_tools.itch" href="itch.html">renpy_distribute_tools.itch</a></code></dt>
+<dd>
+<section class="desc"><p>The <a title="renpy_distribute_tools.itch" href="itch.html"><code>renpy_distribute_tools.itch</code></a> module contains the code necessary to push projects to Itch.io using the butler
+tool.</p></section>
 </dd>
 <dt><code class="name"><a title="renpy_distribute_tools.plist" href="plist.html">renpy_distribute_tools.plist</a></code></dt>
 <dd>
@@ -129,6 +134,7 @@ version of a VN.</p></section>
 <ul>
 <li><code><a title="renpy_distribute_tools.apple" href="apple.html">renpy_distribute_tools.apple</a></code></li>
 <li><code><a title="renpy_distribute_tools.fixed_zipfile" href="fixed_zipfile.html">renpy_distribute_tools.fixed_zipfile</a></code></li>
+<li><code><a title="renpy_distribute_tools.itch" href="itch.html">renpy_distribute_tools.itch</a></code></li>
 <li><code><a title="renpy_distribute_tools.plist" href="plist.html">renpy_distribute_tools.plist</a></code></li>
 <li><code><a title="renpy_distribute_tools.util" href="util.html">renpy_distribute_tools.util</a></code></li>
 </ul>

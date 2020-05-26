@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.4" />
-<title>renpy_distribute_tools.plist API documentation</title>
-<meta name="description" content="This module contains some utilities that help fix the property lists
-in the macOS versions of a Ren&#39;Py project." />
+<title>renpy_distribute_tools.itch API documentation</title>
+<meta name="description" content="The `itch` module contains the code necessary to push projects to Itch.io using the butler
+tool." />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -18,38 +18,52 @@ in the macOS versions of a Ren&#39;Py project." />
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>renpy_distribute_tools.plist</code></h1>
+<h1 class="title">Module <code>renpy_distribute_tools.itch</code></h1>
 </header>
 <section id="section-intro">
-<p>This module contains some utilities that help fix the property lists
-in the macOS versions of a Ren'Py project.</p>
+<p>The <code>itch</code> module contains the code necessary to push projects to Itch.io using the butler
+tool.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34;
-    This module contains some utilities that help fix the property lists
-    in the macOS versions of a Ren&#39;Py project.
+<pre><code class="python">&#34;&#34;&#34;The `itch` module contains the code necessary to push projects to Itch.io using the butler
+    tool.
 &#34;&#34;&#34;
-import plistlib
+import subprocess as proc
 
 
-def fix_plist(plist_file: str, identifier: str, p_copyright: str):
-    &#34;&#34;&#34;Add the bundle identifier and copyright text to a Ren&#39;Py-built macOS app&#39;s Info.plist.
+class Butler(object):
+    &#34;&#34;&#34;A class representation of the Butler from Itch.io.&#34;&#34;&#34;
 
-    Args:
-        plist_file (str): The path to the plist file to modify
-        identifier (str): The bundle identifier to set the app to
-        p_copyright (str): The human-readable copyright text to attach
-    &#34;&#34;&#34;
-    with open(plist_file, &#39;rb&#39;) as file_obj:
-        properties = plistlib.load(file_obj)
+    def __init__(self, author, project, **kwargs):
+        &#34;&#34;&#34;Initialize a Butler class.
 
-    properties[&#34;CFBundleIdentifier&#34;] = identifier
-    properties[&#34;NSHumanReadableCopyright&#34;] = p_copyright
+        Arguments:
+            author (str): The itch.io user that will submit a project.
+            project (str): The project that the user will submit.
 
-    with open(plist_file, &#39;wb&#39;) as file:
-        plistlib.dump(properties, file)</code></pre>
+        Kwargs:
+            exec (str): The path to the Butler executable file. Defaults to &#34;butler&#34;.
+        &#34;&#34;&#34;
+        self.author = author
+        self.project = project
+        self.bin = kwargs[&#34;exec&#34;] if &#34;exec&#34; in kwargs else &#34;butler&#34;
+
+    def push(self, file: str, **kwargs):
+        &#34;&#34;&#34;Push the file to the Itch.io page.
+
+        Arguments:
+            file (str): The path to the file to push.
+            **kwargs: Arbitrary keyword arguments
+
+        Kwargs:
+            user_version (str): The user version to use, if any.
+        &#34;&#34;&#34;
+        command = [self.bin, file, self.author + &#34;/&#34; + self.project]
+        if &#34;user_version&#34; in kwargs:
+            command += [&#34;--userversion&#34;, kwargs[&#34;user_version&#34;]]
+        return proc.check_call(command)</code></pre>
 </details>
 </section>
 <section>
@@ -57,47 +71,107 @@ def fix_plist(plist_file: str, identifier: str, p_copyright: str):
 <section>
 </section>
 <section>
-<h2 class="section-title" id="header-functions">Functions</h2>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="renpy_distribute_tools.plist.fix_plist"><code class="name flex">
-<span>def <span class="ident">fix_plist</span></span>(<span>plist_file, identifier, p_copyright)</span>
+<dt id="renpy_distribute_tools.itch.Butler"><code class="flex name class">
+<span>class <span class="ident">Butler</span></span>
+<span>(</span><span>author, project, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Add the bundle identifier and copyright text to a Ren'Py-built macOS app's Info.plist.</p>
-<h2 id="args">Args</h2>
+<section class="desc"><p>A class representation of the Butler from Itch.io.</p>
+<p>Initialize a Butler class.</p>
+<h2 id="arguments">Arguments</h2>
 <dl>
-<dt><strong><code>plist_file</code></strong> :&ensp;<code>str</code></dt>
-<dd>The path to the plist file to modify</dd>
-<dt><strong><code>identifier</code></strong> :&ensp;<code>str</code></dt>
-<dd>The bundle identifier to set the app to</dd>
-<dt><strong><code>p_copyright</code></strong> :&ensp;<code>str</code></dt>
-<dd>The human-readable copyright text to attach</dd>
+<dt><strong><code>author</code></strong> :&ensp;<code>str</code></dt>
+<dd>The itch.io user that will submit a project.</dd>
+<dt><strong><code>project</code></strong> :&ensp;<code>str</code></dt>
+<dd>The project that the user will submit.</dd>
+</dl>
+<h2 id="kwargs">Kwargs</h2>
+<dl>
+<dt><strong><code>exec</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path to the Butler executable file. Defaults to "butler".</dd>
 </dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def fix_plist(plist_file: str, identifier: str, p_copyright: str):
-    &#34;&#34;&#34;Add the bundle identifier and copyright text to a Ren&#39;Py-built macOS app&#39;s Info.plist.
+<pre><code class="python">class Butler(object):
+    &#34;&#34;&#34;A class representation of the Butler from Itch.io.&#34;&#34;&#34;
 
-    Args:
-        plist_file (str): The path to the plist file to modify
-        identifier (str): The bundle identifier to set the app to
-        p_copyright (str): The human-readable copyright text to attach
+    def __init__(self, author, project, **kwargs):
+        &#34;&#34;&#34;Initialize a Butler class.
+
+        Arguments:
+            author (str): The itch.io user that will submit a project.
+            project (str): The project that the user will submit.
+
+        Kwargs:
+            exec (str): The path to the Butler executable file. Defaults to &#34;butler&#34;.
+        &#34;&#34;&#34;
+        self.author = author
+        self.project = project
+        self.bin = kwargs[&#34;exec&#34;] if &#34;exec&#34; in kwargs else &#34;butler&#34;
+
+    def push(self, file: str, **kwargs):
+        &#34;&#34;&#34;Push the file to the Itch.io page.
+
+        Arguments:
+            file (str): The path to the file to push.
+            **kwargs: Arbitrary keyword arguments
+
+        Kwargs:
+            user_version (str): The user version to use, if any.
+        &#34;&#34;&#34;
+        command = [self.bin, file, self.author + &#34;/&#34; + self.project]
+        if &#34;user_version&#34; in kwargs:
+            command += [&#34;--userversion&#34;, kwargs[&#34;user_version&#34;]]
+        return proc.check_call(command)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="renpy_distribute_tools.itch.Butler.push"><code class="name flex">
+<span>def <span class="ident">push</span></span>(<span>self, file, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Push the file to the Itch.io page.</p>
+<h2 id="arguments">Arguments</h2>
+<dl>
+<dt><strong><code>file</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path to the file to push.</dd>
+<dt><strong><code>**kwargs</code></strong></dt>
+<dd>Arbitrary keyword arguments</dd>
+</dl>
+<h2 id="kwargs">Kwargs</h2>
+<dl>
+<dt><strong><code>user_version</code></strong> :&ensp;<code>str</code></dt>
+<dd>The user version to use, if any.</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def push(self, file: str, **kwargs):
+    &#34;&#34;&#34;Push the file to the Itch.io page.
+
+    Arguments:
+        file (str): The path to the file to push.
+        **kwargs: Arbitrary keyword arguments
+
+    Kwargs:
+        user_version (str): The user version to use, if any.
     &#34;&#34;&#34;
-    with open(plist_file, &#39;rb&#39;) as file_obj:
-        properties = plistlib.load(file_obj)
-
-    properties[&#34;CFBundleIdentifier&#34;] = identifier
-    properties[&#34;NSHumanReadableCopyright&#34;] = p_copyright
-
-    with open(plist_file, &#39;wb&#39;) as file:
-        plistlib.dump(properties, file)</code></pre>
+    command = [self.bin, file, self.author + &#34;/&#34; + self.project]
+    if &#34;user_version&#34; in kwargs:
+        command += [&#34;--userversion&#34;, kwargs[&#34;user_version&#34;]]
+    return proc.check_call(command)</code></pre>
 </details>
 </dd>
 </dl>
-</section>
-<section>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -111,9 +185,14 @@ def fix_plist(plist_file: str, identifier: str, p_copyright: str):
 <li><code><a title="renpy_distribute_tools" href="index.html">renpy_distribute_tools</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-functions">Functions</a></h3>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="renpy_distribute_tools.itch.Butler" href="#renpy_distribute_tools.itch.Butler">Butler</a></code></h4>
 <ul class="">
-<li><code><a title="renpy_distribute_tools.plist.fix_plist" href="#renpy_distribute_tools.plist.fix_plist">fix_plist</a></code></li>
+<li><code><a title="renpy_distribute_tools.itch.Butler.push" href="#renpy_distribute_tools.itch.Butler.push">push</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
