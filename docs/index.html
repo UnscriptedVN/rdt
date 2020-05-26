@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.4" />
 <title>renpy_distribute_tools API documentation</title>
-<meta name="description" content="This module contains all of the tools necessary to make Ren&#39;Py
-visual novel distribution less of a hassle …" />
+<meta name="description" content="The Ren&#39;Py Distribution Tools is a Python module that aims to make distribution of Ren&#39;Py visual
+novel projects easier by automating it with …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -21,26 +21,62 @@ visual novel distribution less of a hassle …" />
 <h1 class="title">Module <code>renpy_distribute_tools</code></h1>
 </header>
 <section id="section-intro">
-<p>This module contains all of the tools necessary to make Ren'Py
-visual novel distribution less of a hassle.</p>
-<p>The overall premise of this module is to provide utilities that make
-distribution of Ren'Py visual novels, particularly for macOS, easier.</p>
+<p>The Ren'Py Distribution Tools is a Python module that aims to make distribution of Ren'Py visual
+novel projects easier by automating it with Python utilities and classes.</p>
+<h2 id="getting-started">Getting Started</h2>
+<h3 id="quick-start-install-via-pypipoetry">Quick Start: Install via PyPI/Poetry</h3>
+<p>To install via PyPI:</p>
+<pre><code>pip install renpy-distribute-tools
+</code></pre>
+<p>Or, if you're using a Poetry project, just add the dependency:</p>
+<pre><code>poetry add renpy-distribute-tools
+</code></pre>
+<h2 id="whats-included">What's included</h2>
+<p>The Ren'Py Distribution Tools set comes with utilities that make it easy to do the following:</p>
+<ul>
+<li>Modifying a visual novel's <code>Info.plist</code>.</li>
+<li>Code-signing the visual novel binaries in the Mac app with entitlements.</li>
+<li>Creating a ZIP copy of the Mac app and sending it to Apple's notarization servers.</li>
+<li>Stapling the notarization ticket to a macOS app.</li>
+</ul>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34;This module contains all of the tools necessary to make Ren&#39;Py
-    visual novel distribution less of a hassle.
+<pre><code class="python">&#34;&#34;&#34;The Ren&#39;Py Distribution Tools is a Python module that aims to make distribution of Ren&#39;Py visual
+    novel projects easier by automating it with Python utilities and classes.
 
-The overall premise of this module is to provide utilities that make
-distribution of Ren&#39;Py visual novels, particularly for macOS, easier.
+## Getting Started
+
+### Quick Start: Install via PyPI/Poetry
+
+To install via PyPI:
+
+```
+pip install renpy-distribute-tools
+```
+
+Or, if you&#39;re using a Poetry project, just add the dependency:
+
+```
+poetry add renpy-distribute-tools
+```
+
+## What&#39;s included
+
+The Ren&#39;Py Distribution Tools set comes with utilities that make it easy to do the following:
+
+- Modifying a visual novel&#39;s `Info.plist`.
+- Code-signing the visual novel binaries in the Mac app with entitlements.
+- Creating a ZIP copy of the Mac app and sending it to Apple&#39;s notarization servers.
+- Stapling the notarization ticket to a macOS app.
 &#34;&#34;&#34;
-__version__ = &#39;0.2.2&#39;
+__version__ = &#39;0.4.0&#39;
 
 from renpy_distribute_tools.fixed_zipfile import MyZipFile
 from renpy_distribute_tools.plist import fix_plist
 from renpy_distribute_tools.apple import package_app_zip, \
-                                         upload_to_notary, build_pkg, staple, code_sign
+    upload_to_notary, build_pkg, staple, code_sign
 from renpy_distribute_tools.util import file_exists, find_mac_build, verify_built_files</code></pre>
 </details>
 </section>
@@ -65,8 +101,8 @@ in the macOS versions of a Ren'Py project.</p></section>
 </dd>
 <dt><code class="name"><a title="renpy_distribute_tools.util" href="util.html">renpy_distribute_tools.util</a></code></dt>
 <dd>
-<section class="desc"><p>This module contains some basic utilities to locate Ren'Py
-distributables and to find the macOS version of a VN.</p></section>
+<section class="desc"><p>This module contains some basic utilities to locate Ren'Py distributables and to find the macOS
+version of a VN.</p></section>
 </dd>
 </dl>
 </section>
@@ -80,7 +116,13 @@ distributables and to find the macOS version of a VN.</p></section>
 <nav id="sidebar">
 <h1>Index</h1>
 <div class="toc">
-<ul></ul>
+<ul>
+<li><a href="#getting-started">Getting Started</a><ul>
+<li><a href="#quick-start-install-via-pypipoetry">Quick Start: Install via PyPI/Poetry</a></li>
+</ul>
+</li>
+<li><a href="#whats-included">What's included</a></li>
+</ul>
 </div>
 <ul id="index">
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>

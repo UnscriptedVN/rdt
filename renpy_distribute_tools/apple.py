@@ -8,6 +8,7 @@ import subprocess
 from sys import platform
 from functools import wraps
 
+
 def darwin_only(call):
     """A decorator for macOS-specific commands.
 
@@ -21,6 +22,7 @@ def darwin_only(call):
         call(*args, **kwargs)
     return darwin_call
 
+
 @darwin_only
 def package_app_zip(app: str):
     """Create a ZIP file of the app.
@@ -29,10 +31,13 @@ def package_app_zip(app: str):
             app: The path to the macOS to make an archive of
     """
     if os.path.isdir(app):
-        zip_commands = ["ditto", "-c", "-k", "--rsrc", "--keepParent", app, app + ".zip"]
+        zip_commands = ["ditto", "-c", "-k", "--rsrc",
+                        "--keepParent", app, app + ".zip"]
         subprocess.check_call(zip_commands)
     else:
-        raise NotADirectoryError("The .app file is either missing or not present.")
+        raise NotADirectoryError(
+            "The .app file is either missing or not present.")
+
 
 @darwin_only
 def build_pkg(app: str, identity: str, package_name: str):
@@ -55,6 +60,7 @@ def build_pkg(app: str, identity: str, package_name: str):
     commands = ["productbuild", "--component", app,
                 "/Applications", "--sign", identity, package_file]
     return subprocess.check_call(commands)
+
 
 @darwin_only
 def code_sign(identity: str,
@@ -86,6 +92,7 @@ def code_sign(identity: str,
 
     return subprocess.check_call(commands)
 
+
 @darwin_only
 def upload_to_notary(app: str, identifier: str, username: str, password: str, provider: str = None):
     """Upload a macOS application archive to Apple's notary service for notarization.
@@ -109,6 +116,7 @@ def upload_to_notary(app: str, identifier: str, username: str, password: str, pr
 
     subprocess.check_call(commands)
     os.remove(app + ".zip")
+
 
 @darwin_only
 def staple(app: str):

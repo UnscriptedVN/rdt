@@ -33,19 +33,21 @@ in the macOS versions of a Ren'Py project.</p>
 &#34;&#34;&#34;
 import plistlib
 
-# noinspection PyDeprecation
+
 def fix_plist(plist_file: str, identifier: str, p_copyright: str):
     &#34;&#34;&#34;Add the bundle identifier and copyright text to a Ren&#39;Py-built macOS app&#39;s Info.plist.
 
     Args:
-        plist_file: The path to the plist file to modify
-        identifier: The bundle identifier to set the app to
-        p_copyright: The human-readable copyright text to attach
+        plist_file (str): The path to the plist file to modify
+        identifier (str): The bundle identifier to set the app to
+        p_copyright (str): The human-readable copyright text to attach
     &#34;&#34;&#34;
-    plist = plistlib.readPlist(plist_file)
-    plist[&#39;CFBundleIdentifier&#39;] = identifier
-    plist[&#39;NSHumanReadableCopyright&#39;] = p_copyright
-    plistlib.writePlist(plist, plist_file)</code></pre>
+    with open(plist_file, &#39;rb&#39;) as file_obj:
+        properties = plistlib.load(file_obj)
+    properties[&#34;CFBundleIdentifier&#34;] = identifier
+    properties[&#34;NSHumanReadableCopyright&#34;] = p_copyright
+    with open(plist_file, &#39;wb&#39;) as file:
+        plistlib.dump(properties, file)</code></pre>
 </details>
 </section>
 <section>
@@ -62,11 +64,11 @@ def fix_plist(plist_file: str, identifier: str, p_copyright: str):
 <section class="desc"><p>Add the bundle identifier and copyright text to a Ren'Py-built macOS app's Info.plist.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>plist_file</code></strong></dt>
+<dt><strong><code>plist_file</code></strong> :&ensp;<code>str</code></dt>
 <dd>The path to the plist file to modify</dd>
-<dt><strong><code>identifier</code></strong></dt>
+<dt><strong><code>identifier</code></strong> :&ensp;<code>str</code></dt>
 <dd>The bundle identifier to set the app to</dd>
-<dt><strong><code>p_copyright</code></strong></dt>
+<dt><strong><code>p_copyright</code></strong> :&ensp;<code>str</code></dt>
 <dd>The human-readable copyright text to attach</dd>
 </dl></section>
 <details class="source">
@@ -77,14 +79,16 @@ def fix_plist(plist_file: str, identifier: str, p_copyright: str):
     &#34;&#34;&#34;Add the bundle identifier and copyright text to a Ren&#39;Py-built macOS app&#39;s Info.plist.
 
     Args:
-        plist_file: The path to the plist file to modify
-        identifier: The bundle identifier to set the app to
-        p_copyright: The human-readable copyright text to attach
+        plist_file (str): The path to the plist file to modify
+        identifier (str): The bundle identifier to set the app to
+        p_copyright (str): The human-readable copyright text to attach
     &#34;&#34;&#34;
-    plist = plistlib.readPlist(plist_file)
-    plist[&#39;CFBundleIdentifier&#39;] = identifier
-    plist[&#39;NSHumanReadableCopyright&#39;] = p_copyright
-    plistlib.writePlist(plist, plist_file)</code></pre>
+    with open(plist_file, &#39;rb&#39;) as file_obj:
+        properties = plistlib.load(file_obj)
+    properties[&#34;CFBundleIdentifier&#34;] = identifier
+    properties[&#34;NSHumanReadableCopyright&#34;] = p_copyright
+    with open(plist_file, &#39;wb&#39;) as file:
+        plistlib.dump(properties, file)</code></pre>
 </details>
 </dd>
 </dl>
