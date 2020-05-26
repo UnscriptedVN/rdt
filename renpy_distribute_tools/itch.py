@@ -2,10 +2,33 @@
     tool.
 """
 import subprocess as proc
+import enum
+
+
+class ButlerPlatformType(enum.Enum):
+    """Enumerations for platform types."""
+    WINDOWS = "win"
+    DARWIN = "mac"
+    LINUX = "linux"
+    OTHER = ""
+
+
+DEFAULT_TAG_RULES = {
+    "win": ButlerPlatformType.WINDOWS,
+    "mac": ButlerPlatformType.DARWIN,
+    "linux": ButlerPlatformType.LINUX
+}
 
 
 class Butler(object):
-    """A class representation of the Butler from Itch.io."""
+    """The handler for publishing content to Itch.io using Butler.
+
+    Attributes:
+        author (str): The itch.io username that is publishing content.
+        project (str): The project that the author is publishing content for.
+        bin (str): The path to the Butler executable.
+        tag_rules (dict): A dictionary containing rules for additional tags.
+    """
 
     def __init__(self, author, project, **kwargs):
         """Initialize a Butler class.
@@ -19,6 +42,7 @@ class Butler(object):
         """
         self.author = author
         self.project = project
+        self.tag_rules = DEFAULT_TAG_RULES.copy()
         self.bin = kwargs["exec"] if "exec" in kwargs else "butler"
 
     def push(self, file: str, **kwargs):
@@ -30,8 +54,27 @@ class Butler(object):
 
         Kwargs:
             user_version (str): The user version to use, if any.
+            with_tag_rule (str): The tag rule to use. This is used as a channel.
+            with_custom_tag (str): The tag to use at the end of the tag rule name.
         """
-        command = [self.bin, file, self.author + "/" + self.project]
+        channel = self.author + "/" + self.project
+        command = [self.bin, file, channel]
+
+        if "with_tag_rule" in kwargs:
+            channel += ":" + self.tag_rules.get(kwargs["with_tag_rule"])
+
+        if "with_custom_tag" in kwargs:
+            channel += "-" + kwargs["with_custom_tag"]
+
         if "user_version" in kwargs:
             command += ["--userversion", kwargs["user_version"]]
         return proc.check_call(command)
+
+    def add_tag_rule(self, name: str, platform: ButlerPlatformType):
+        """Create a new rule for the project's channel tags.
+
+        Arguments:
+            name (str): The rule that will determine what platform to store it under.
+            platform (ButlerPlatformType): The platform for that rule.
+        """
+        self.tag_rules[name] = platform

@@ -22,7 +22,7 @@ stripped." />
 <h1 class="title">Module <code>renpy_distribute_tools.fixed_zipfile</code></h1>
 </header>
 <section id="section-intro">
-<p>This module contains a customized version of the <code>ZipFile</code> object
+<p>This module contains a customized version of the <a title="renpy_distribute_tools.fixed_zipfile.ZipFile" href="#renpy_distribute_tools.fixed_zipfile.ZipFile"><code>ZipFile</code></a> object
 to properly handle extraction of macOS apps so that permissions aren't
 stripped.</p>
 <details class="source">
@@ -35,9 +35,15 @@ stripped.</p>
     stripped.
 &#34;&#34;&#34;
 import os
-from zipfile import ZipFile, ZipInfo
+from zipfile import ZipFile as PyZipFile, ZipInfo
+from renpy_distribute_tools.util import deprecated
 
-class MyZipFile(ZipFile):
+
+class ZipFile(PyZipFile):
+    &#34;&#34;&#34;The ZipFile class is a patched version of the ZipFile class in the `zipfile` module that
+        retains the attribute permissions for files.
+    &#34;&#34;&#34;
+
     def extract(self, member, path=None, pwd=None):
         if not isinstance(member, ZipInfo):
             member = self.getinfo(member)
@@ -61,7 +67,14 @@ class MyZipFile(ZipFile):
             path = os.fspath(path)
 
         for zipinfo in members:
-            self.extract(zipinfo, path, pwd)</code></pre>
+            self.extract(zipinfo, path, pwd)
+
+
+@deprecated(&#34;MyZipFile has been renamed to ZipFile.&#34;)
+class MyZipFile(ZipFile):
+    &#34;&#34;&#34;The MyZipFile class is a patched version of the ZipFile class in the `zipfile` module that
+        retains the attribute permissions for files.
+    &#34;&#34;&#34;</code></pre>
 </details>
 </section>
 <section>
@@ -78,23 +91,8 @@ class MyZipFile(ZipFile):
 <span>(</span><span>file, mode='r', compression=0, allowZip64=True, compresslevel=None, *, strict_timestamps=True)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Class with methods to open, read, write, close, list zip files.</p>
-<p>z = ZipFile(file, mode="r", compression=ZIP_STORED, allowZip64=True,
-compresslevel=None)</p>
-<p>file: Either the path to the file, or a file-like object.
-If it is a path, the file will be opened and closed by ZipFile.
-mode: The mode can be either read 'r', write 'w', exclusive create 'x',
-or append 'a'.
-compression: ZIP_STORED (no compression), ZIP_DEFLATED (requires zlib),
-ZIP_BZIP2 (requires bz2) or ZIP_LZMA (requires lzma).
-allowZip64: if True ZipFile will create files with ZIP64 extensions when
-needed, otherwise it will raise an exception when this would
-be necessary.
-compresslevel: None (default for the given compression type) or an integer
-specifying the level to pass to the compressor.
-When using ZIP_STORED or ZIP_LZMA this keyword has no effect.
-When using ZIP_DEFLATED integers 0 through 9 are accepted.
-When using ZIP_BZIP2 integers 1 through 9 are accepted.</p>
+<section class="desc"><p>The MyZipFile class is a patched version of the ZipFile class in the <code>zipfile</code> module that
+retains the attribute permissions for files.</p>
 <p>Open the ZIP file with mode read 'r', write 'w', exclusive create 'x',
 or append 'a'.</p></section>
 <details class="source">
@@ -102,6 +100,43 @@ or append 'a'.</p></section>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class MyZipFile(ZipFile):
+    &#34;&#34;&#34;The MyZipFile class is a patched version of the ZipFile class in the `zipfile` module that
+        retains the attribute permissions for files.
+    &#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="renpy_distribute_tools.fixed_zipfile.ZipFile" href="#renpy_distribute_tools.fixed_zipfile.ZipFile">ZipFile</a></li>
+<li>zipfile.ZipFile</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="renpy_distribute_tools.fixed_zipfile.ZipFile" href="#renpy_distribute_tools.fixed_zipfile.ZipFile">ZipFile</a></b></code>:
+<ul class="hlist">
+<li><code><a title="renpy_distribute_tools.fixed_zipfile.ZipFile.extract" href="#renpy_distribute_tools.fixed_zipfile.ZipFile.extract">extract</a></code></li>
+<li><code><a title="renpy_distribute_tools.fixed_zipfile.ZipFile.extractall" href="#renpy_distribute_tools.fixed_zipfile.ZipFile.extractall">extractall</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="renpy_distribute_tools.fixed_zipfile.ZipFile"><code class="flex name class">
+<span>class <span class="ident">ZipFile</span></span>
+<span>(</span><span>file, mode='r', compression=0, allowZip64=True, compresslevel=None, *, strict_timestamps=True)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The ZipFile class is a patched version of the ZipFile class in the <code>zipfile</code> module that
+retains the attribute permissions for files.</p>
+<p>Open the ZIP file with mode read 'r', write 'w', exclusive create 'x',
+or append 'a'.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ZipFile(PyZipFile):
+    &#34;&#34;&#34;The ZipFile class is a patched version of the ZipFile class in the `zipfile` module that
+        retains the attribute permissions for files.
+    &#34;&#34;&#34;
+
     def extract(self, member, path=None, pwd=None):
         if not isinstance(member, ZipInfo):
             member = self.getinfo(member)
@@ -131,9 +166,13 @@ or append 'a'.</p></section>
 <ul class="hlist">
 <li>zipfile.ZipFile</li>
 </ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="renpy_distribute_tools.fixed_zipfile.MyZipFile" href="#renpy_distribute_tools.fixed_zipfile.MyZipFile">MyZipFile</a></li>
+</ul>
 <h3>Methods</h3>
 <dl>
-<dt id="renpy_distribute_tools.fixed_zipfile.MyZipFile.extract"><code class="name flex">
+<dt id="renpy_distribute_tools.fixed_zipfile.ZipFile.extract"><code class="name flex">
 <span>def <span class="ident">extract</span></span>(<span>self, member, path=None, pwd=None)</span>
 </code></dt>
 <dd>
@@ -159,7 +198,7 @@ specify a different directory using</code>path'.</p></section>
     return ret_val</code></pre>
 </details>
 </dd>
-<dt id="renpy_distribute_tools.fixed_zipfile.MyZipFile.extractall"><code class="name flex">
+<dt id="renpy_distribute_tools.fixed_zipfile.ZipFile.extractall"><code class="name flex">
 <span>def <span class="ident">extractall</span></span>(<span>self, path=None, members=None, pwd=None)</span>
 </code></dt>
 <dd>
@@ -203,9 +242,12 @@ by namelist().</p></section>
 <ul>
 <li>
 <h4><code><a title="renpy_distribute_tools.fixed_zipfile.MyZipFile" href="#renpy_distribute_tools.fixed_zipfile.MyZipFile">MyZipFile</a></code></h4>
+</li>
+<li>
+<h4><code><a title="renpy_distribute_tools.fixed_zipfile.ZipFile" href="#renpy_distribute_tools.fixed_zipfile.ZipFile">ZipFile</a></code></h4>
 <ul class="">
-<li><code><a title="renpy_distribute_tools.fixed_zipfile.MyZipFile.extract" href="#renpy_distribute_tools.fixed_zipfile.MyZipFile.extract">extract</a></code></li>
-<li><code><a title="renpy_distribute_tools.fixed_zipfile.MyZipFile.extractall" href="#renpy_distribute_tools.fixed_zipfile.MyZipFile.extractall">extractall</a></code></li>
+<li><code><a title="renpy_distribute_tools.fixed_zipfile.ZipFile.extract" href="#renpy_distribute_tools.fixed_zipfile.ZipFile.extract">extract</a></code></li>
+<li><code><a title="renpy_distribute_tools.fixed_zipfile.ZipFile.extractall" href="#renpy_distribute_tools.fixed_zipfile.ZipFile.extractall">extractall</a></code></li>
 </ul>
 </li>
 </ul>

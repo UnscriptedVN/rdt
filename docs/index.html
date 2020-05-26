@@ -34,10 +34,11 @@ novel projects easier by automating it with Python utilities and classes.</p>
 <h2 id="whats-included">What's included</h2>
 <p>The Ren'Py Distribution Tools set comes with utilities that make it easy to do the following:</p>
 <ul>
-<li>Modifying a visual novel's <code>Info.plist</code>.</li>
+<li>Modifying a visual novel's <code>Info.plist</code> with an identifier and copyright field.</li>
 <li>Code-signing the visual novel binaries in the Mac app with entitlements.</li>
 <li>Creating a ZIP copy of the Mac app and sending it to Apple's notarization servers.</li>
 <li>Stapling the notarization ticket to a macOS app.</li>
+<li>Publishing content to Itch.io.</li>
 </ul>
 <details class="source">
 <summary>
@@ -66,18 +67,20 @@ poetry add renpy-distribute-tools
 
 The Ren&#39;Py Distribution Tools set comes with utilities that make it easy to do the following:
 
-- Modifying a visual novel&#39;s `Info.plist`.
+- Modifying a visual novel&#39;s `Info.plist` with an identifier and copyright field.
 - Code-signing the visual novel binaries in the Mac app with entitlements.
 - Creating a ZIP copy of the Mac app and sending it to Apple&#39;s notarization servers.
 - Stapling the notarization ticket to a macOS app.
+- Publishing content to Itch.io.
 &#34;&#34;&#34;
 __version__ = &#39;0.4.0&#39;
 
-from renpy_distribute_tools.fixed_zipfile import MyZipFile
+from renpy_distribute_tools.fixed_zipfile import ZipFile, MyZipFile
 from renpy_distribute_tools.plist import fix_plist
 from renpy_distribute_tools.apple import package_app_zip, \
     upload_to_notary, build_pkg, staple, code_sign
-from renpy_distribute_tools.util import deprecated, file_exists, find_mac_build, verify_built_files</code></pre>
+from renpy_distribute_tools.util import deprecated, file_exists, find_mac_build, verify_built_files
+from renpy_distribute_tools.itch import Butler, ButlerPlatformType, DEFAULT_TAG_RULES</code></pre>
 </details>
 </section>
 <section>

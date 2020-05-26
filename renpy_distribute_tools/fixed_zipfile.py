@@ -4,9 +4,15 @@
     stripped.
 """
 import os
-from zipfile import ZipFile, ZipInfo
+from zipfile import ZipFile as PyZipFile, ZipInfo
+from renpy_distribute_tools.util import deprecated
 
-class MyZipFile(ZipFile):
+
+class ZipFile(PyZipFile):
+    """The ZipFile class is a patched version of the ZipFile class in the `zipfile` module that
+        retains the attribute permissions for files.
+    """
+
     def extract(self, member, path=None, pwd=None):
         if not isinstance(member, ZipInfo):
             member = self.getinfo(member)
@@ -31,3 +37,10 @@ class MyZipFile(ZipFile):
 
         for zipinfo in members:
             self.extract(zipinfo, path, pwd)
+
+
+@deprecated("MyZipFile has been renamed to ZipFile.")
+class MyZipFile(ZipFile):
+    """The MyZipFile class is a patched version of the ZipFile class in the `zipfile` module that
+        retains the attribute permissions for files.
+    """

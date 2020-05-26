@@ -31,10 +31,33 @@ tool.</p>
     tool.
 &#34;&#34;&#34;
 import subprocess as proc
+import enum
+
+
+class ButlerPlatformType(enum.Enum):
+    &#34;&#34;&#34;Enumerations for platform types.&#34;&#34;&#34;
+    WINDOWS = &#34;win&#34;
+    DARWIN = &#34;mac&#34;
+    LINUX = &#34;linux&#34;
+    OTHER = &#34;&#34;
+
+
+DEFAULT_TAG_RULES = {
+    &#34;win&#34;: ButlerPlatformType.WINDOWS,
+    &#34;mac&#34;: ButlerPlatformType.DARWIN,
+    &#34;linux&#34;: ButlerPlatformType.LINUX
+}
 
 
 class Butler(object):
-    &#34;&#34;&#34;A class representation of the Butler from Itch.io.&#34;&#34;&#34;
+    &#34;&#34;&#34;The handler for publishing content to Itch.io using Butler.
+
+    Attributes:
+        author (str): The itch.io username that is publishing content.
+        project (str): The project that the author is publishing content for.
+        bin (str): The path to the Butler executable.
+        tag_rules (dict): A dictionary containing rules for additional tags.
+    &#34;&#34;&#34;
 
     def __init__(self, author, project, **kwargs):
         &#34;&#34;&#34;Initialize a Butler class.
@@ -48,6 +71,7 @@ class Butler(object):
         &#34;&#34;&#34;
         self.author = author
         self.project = project
+        self.tag_rules = DEFAULT_TAG_RULES.copy()
         self.bin = kwargs[&#34;exec&#34;] if &#34;exec&#34; in kwargs else &#34;butler&#34;
 
     def push(self, file: str, **kwargs):
@@ -59,11 +83,30 @@ class Butler(object):
 
         Kwargs:
             user_version (str): The user version to use, if any.
+            with_tag_rule (str): The tag rule to use. This is used as a channel.
+            with_custom_tag (str): The tag to use at the end of the tag rule name.
         &#34;&#34;&#34;
-        command = [self.bin, file, self.author + &#34;/&#34; + self.project]
+        channel = self.author + &#34;/&#34; + self.project
+        command = [self.bin, file, channel]
+
+        if &#34;with_tag_rule&#34; in kwargs:
+            channel += &#34;:&#34; + self.tag_rules.get(kwargs[&#34;with_tag_rule&#34;])
+
+        if &#34;with_custom_tag&#34; in kwargs:
+            channel += &#34;-&#34; + kwargs[&#34;with_custom_tag&#34;]
+
         if &#34;user_version&#34; in kwargs:
             command += [&#34;--userversion&#34;, kwargs[&#34;user_version&#34;]]
-        return proc.check_call(command)</code></pre>
+        return proc.check_call(command)
+
+    def add_tag_rule(self, name: str, platform: ButlerPlatformType):
+        &#34;&#34;&#34;Create a new rule for the project&#39;s channel tags.
+
+        Arguments:
+            name (str): The rule that will determine what platform to store it under.
+            platform (ButlerPlatformType): The platform for that rule.
+        &#34;&#34;&#34;
+        self.tag_rules[name] = platform</code></pre>
 </details>
 </section>
 <section>
@@ -80,7 +123,18 @@ class Butler(object):
 <span>(</span><span>author, project, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>A class representation of the Butler from Itch.io.</p>
+<section class="desc"><p>The handler for publishing content to Itch.io using Butler.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>author</code></strong> :&ensp;<code>str</code></dt>
+<dd>The itch.io username that is publishing content.</dd>
+<dt><strong><code>project</code></strong> :&ensp;<code>str</code></dt>
+<dd>The project that the author is publishing content for.</dd>
+<dt><strong><code>bin</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path to the Butler executable.</dd>
+<dt><strong><code>tag_rules</code></strong> :&ensp;<code>dict</code></dt>
+<dd>A dictionary containing rules for additional tags.</dd>
+</dl>
 <p>Initialize a Butler class.</p>
 <h2 id="arguments">Arguments</h2>
 <dl>
@@ -99,7 +153,14 @@ class Butler(object):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Butler(object):
-    &#34;&#34;&#34;A class representation of the Butler from Itch.io.&#34;&#34;&#34;
+    &#34;&#34;&#34;The handler for publishing content to Itch.io using Butler.
+
+    Attributes:
+        author (str): The itch.io username that is publishing content.
+        project (str): The project that the author is publishing content for.
+        bin (str): The path to the Butler executable.
+        tag_rules (dict): A dictionary containing rules for additional tags.
+    &#34;&#34;&#34;
 
     def __init__(self, author, project, **kwargs):
         &#34;&#34;&#34;Initialize a Butler class.
@@ -113,6 +174,7 @@ class Butler(object):
         &#34;&#34;&#34;
         self.author = author
         self.project = project
+        self.tag_rules = DEFAULT_TAG_RULES.copy()
         self.bin = kwargs[&#34;exec&#34;] if &#34;exec&#34; in kwargs else &#34;butler&#34;
 
     def push(self, file: str, **kwargs):
@@ -124,14 +186,59 @@ class Butler(object):
 
         Kwargs:
             user_version (str): The user version to use, if any.
+            with_tag_rule (str): The tag rule to use. This is used as a channel.
+            with_custom_tag (str): The tag to use at the end of the tag rule name.
         &#34;&#34;&#34;
-        command = [self.bin, file, self.author + &#34;/&#34; + self.project]
+        channel = self.author + &#34;/&#34; + self.project
+        command = [self.bin, file, channel]
+
+        if &#34;with_tag_rule&#34; in kwargs:
+            channel += &#34;:&#34; + self.tag_rules.get(kwargs[&#34;with_tag_rule&#34;])
+
+        if &#34;with_custom_tag&#34; in kwargs:
+            channel += &#34;-&#34; + kwargs[&#34;with_custom_tag&#34;]
+
         if &#34;user_version&#34; in kwargs:
             command += [&#34;--userversion&#34;, kwargs[&#34;user_version&#34;]]
-        return proc.check_call(command)</code></pre>
+        return proc.check_call(command)
+
+    def add_tag_rule(self, name: str, platform: ButlerPlatformType):
+        &#34;&#34;&#34;Create a new rule for the project&#39;s channel tags.
+
+        Arguments:
+            name (str): The rule that will determine what platform to store it under.
+            platform (ButlerPlatformType): The platform for that rule.
+        &#34;&#34;&#34;
+        self.tag_rules[name] = platform</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
+<dt id="renpy_distribute_tools.itch.Butler.add_tag_rule"><code class="name flex">
+<span>def <span class="ident">add_tag_rule</span></span>(<span>self, name, platform)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a new rule for the project's channel tags.</p>
+<h2 id="arguments">Arguments</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The rule that will determine what platform to store it under.</dd>
+<dt><strong><code>platform</code></strong> :&ensp;<a title="renpy_distribute_tools.itch.ButlerPlatformType" href="#renpy_distribute_tools.itch.ButlerPlatformType"><code>ButlerPlatformType</code></a></dt>
+<dd>The platform for that rule.</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_tag_rule(self, name: str, platform: ButlerPlatformType):
+    &#34;&#34;&#34;Create a new rule for the project&#39;s channel tags.
+
+    Arguments:
+        name (str): The rule that will determine what platform to store it under.
+        platform (ButlerPlatformType): The platform for that rule.
+    &#34;&#34;&#34;
+    self.tag_rules[name] = platform</code></pre>
+</details>
+</dd>
 <dt id="renpy_distribute_tools.itch.Butler.push"><code class="name flex">
 <span>def <span class="ident">push</span></span>(<span>self, file, **kwargs)</span>
 </code></dt>
@@ -148,6 +255,10 @@ class Butler(object):
 <dl>
 <dt><strong><code>user_version</code></strong> :&ensp;<code>str</code></dt>
 <dd>The user version to use, if any.</dd>
+<dt><strong><code>with_tag_rule</code></strong> :&ensp;<code>str</code></dt>
+<dd>The tag rule to use. This is used as a channel.</dd>
+<dt><strong><code>with_custom_tag</code></strong> :&ensp;<code>str</code></dt>
+<dd>The tag to use at the end of the tag rule name.</dd>
 </dl></section>
 <details class="source">
 <summary>
@@ -162,12 +273,63 @@ class Butler(object):
 
     Kwargs:
         user_version (str): The user version to use, if any.
+        with_tag_rule (str): The tag rule to use. This is used as a channel.
+        with_custom_tag (str): The tag to use at the end of the tag rule name.
     &#34;&#34;&#34;
-    command = [self.bin, file, self.author + &#34;/&#34; + self.project]
+    channel = self.author + &#34;/&#34; + self.project
+    command = [self.bin, file, channel]
+
+    if &#34;with_tag_rule&#34; in kwargs:
+        channel += &#34;:&#34; + self.tag_rules.get(kwargs[&#34;with_tag_rule&#34;])
+
+    if &#34;with_custom_tag&#34; in kwargs:
+        channel += &#34;-&#34; + kwargs[&#34;with_custom_tag&#34;]
+
     if &#34;user_version&#34; in kwargs:
         command += [&#34;--userversion&#34;, kwargs[&#34;user_version&#34;]]
     return proc.check_call(command)</code></pre>
 </details>
+</dd>
+</dl>
+</dd>
+<dt id="renpy_distribute_tools.itch.ButlerPlatformType"><code class="flex name class">
+<span>class <span class="ident">ButlerPlatformType</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Enumerations for platform types.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ButlerPlatformType(enum.Enum):
+    &#34;&#34;&#34;Enumerations for platform types.&#34;&#34;&#34;
+    WINDOWS = &#34;win&#34;
+    DARWIN = &#34;mac&#34;
+    LINUX = &#34;linux&#34;
+    OTHER = &#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="renpy_distribute_tools.itch.ButlerPlatformType.DARWIN"><code class="name">var <span class="ident">DARWIN</span></code></dt>
+<dd>
+<section class="desc"><p>Enumerations for platform types.</p></section>
+</dd>
+<dt id="renpy_distribute_tools.itch.ButlerPlatformType.LINUX"><code class="name">var <span class="ident">LINUX</span></code></dt>
+<dd>
+<section class="desc"><p>Enumerations for platform types.</p></section>
+</dd>
+<dt id="renpy_distribute_tools.itch.ButlerPlatformType.OTHER"><code class="name">var <span class="ident">OTHER</span></code></dt>
+<dd>
+<section class="desc"><p>Enumerations for platform types.</p></section>
+</dd>
+<dt id="renpy_distribute_tools.itch.ButlerPlatformType.WINDOWS"><code class="name">var <span class="ident">WINDOWS</span></code></dt>
+<dd>
+<section class="desc"><p>Enumerations for platform types.</p></section>
 </dd>
 </dl>
 </dd>
@@ -190,7 +352,17 @@ class Butler(object):
 <li>
 <h4><code><a title="renpy_distribute_tools.itch.Butler" href="#renpy_distribute_tools.itch.Butler">Butler</a></code></h4>
 <ul class="">
+<li><code><a title="renpy_distribute_tools.itch.Butler.add_tag_rule" href="#renpy_distribute_tools.itch.Butler.add_tag_rule">add_tag_rule</a></code></li>
 <li><code><a title="renpy_distribute_tools.itch.Butler.push" href="#renpy_distribute_tools.itch.Butler.push">push</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="renpy_distribute_tools.itch.ButlerPlatformType" href="#renpy_distribute_tools.itch.ButlerPlatformType">ButlerPlatformType</a></code></h4>
+<ul class="">
+<li><code><a title="renpy_distribute_tools.itch.ButlerPlatformType.DARWIN" href="#renpy_distribute_tools.itch.ButlerPlatformType.DARWIN">DARWIN</a></code></li>
+<li><code><a title="renpy_distribute_tools.itch.ButlerPlatformType.LINUX" href="#renpy_distribute_tools.itch.ButlerPlatformType.LINUX">LINUX</a></code></li>
+<li><code><a title="renpy_distribute_tools.itch.ButlerPlatformType.OTHER" href="#renpy_distribute_tools.itch.ButlerPlatformType.OTHER">OTHER</a></code></li>
+<li><code><a title="renpy_distribute_tools.itch.ButlerPlatformType.WINDOWS" href="#renpy_distribute_tools.itch.ButlerPlatformType.WINDOWS">WINDOWS</a></code></li>
 </ul>
 </li>
 </ul>
