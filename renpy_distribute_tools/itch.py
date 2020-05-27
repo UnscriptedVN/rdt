@@ -58,15 +58,16 @@ class Butler(object):
             with_custom_tag (str): The tag to use at the end of the tag rule name.
         """
         channel = self.author + "/" + self.project
-        command = [self.bin, file, channel]
 
         if "with_tag_rule" in kwargs:
             tag: ButlerPlatformType = self.tag_rules.get(
-                ["with_tag_rule"], ButlerPlatformType.OTHER)
+                kwargs["with_tag_rule"], ButlerPlatformType.OTHER)
             channel += ":" + tag.value
 
         if "with_custom_tag" in kwargs:
             channel += "-" + kwargs["with_custom_tag"]
+
+        command = [self.bin, "push", file, channel]
 
         if "user_version" in kwargs:
             command += ["--userversion", kwargs["user_version"]]
