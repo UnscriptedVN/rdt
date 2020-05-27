@@ -42,13 +42,16 @@ The Ren'Py Distribution Tools set comes with utilities that make it easy to do t
 - Modifying a visual novel's `Info.plist`.
 - Code-signing the visual novel binaries in the Mac app with entitlements.
 - Creating a ZIP copy of the Mac app and sending it to Apple's notarization servers.
+- Verifying the notarization status of an app.
 - Stapling the notarization ticket to a macOS app.
+- Distributing app content through Itch.io.
 
 ## Usage
 
 The documentation website covers all of the modules contained in the RDT package. [View docs &rsaquo;](https://unscriptedvn.github.io/rdt/)
 
 ### Example Usage: Notarizing a macOS build
+
 ```py
 import renpy_distribute_tools as rdt
 
