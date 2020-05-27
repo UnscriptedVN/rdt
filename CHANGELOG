@@ -1,9 +1,13 @@
 [v0.4.0]
-- Marks file_exists as deprecated
+- Marks most functions in util as deprecated
 - Adds new Itch.io tools via Butler, ButlerPlatformType
+- Introduces check_notary_status to check the status of a notarization request
+- Updates upload_to_notary to return the request's UUID
+- Fixes a bug where returns in the darwin_call wrapper didn't properly return values
+
 
 [v0.3.1]
-- Fixes a bug where arguments and keyword arguments with functions with the darwin_call wrapper were not properly passed.
+- Fixes a bug where arguments and keyword arguments with functions with the darwin_call wrapper were not properly passed
 
 [v0.3.0]
 - Added @darwin_only decorator to macOS-specific commands

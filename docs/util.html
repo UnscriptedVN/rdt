@@ -80,7 +80,8 @@ def file_exists(directory: str = os.getcwd(), item: str = &#39;&#39;) -&gt; Opti
     return None
 
 
-def verify_built_files(directory: str = os.getcwd()) -&gt; bool:
+@deprecated(&#34;This function is no longer supported.&#34;)
+def verify_built_files(directory: str = os.getcwd()) -&gt; Optional[str]:
     &#34;&#34;&#34;Determine if the Ren&#39;Py distributions have been built already by looking for the `-dists`
         directory.
 
@@ -92,9 +93,10 @@ def verify_built_files(directory: str = os.getcwd()) -&gt; bool:
     Returns:
         isdir (bool): Whether the directory exists or not.
     &#34;&#34;&#34;
-    return os.path.isdir(directory + &#34;-dists&#34;)
+    return file_exists(directory=directory, item=&#34;-dists&#34;)
 
 
+@deprecated(&#34;This function is longer supported.&#34;)
 def find_mac_build(directory: str) -&gt; bool:
     &#34;&#34;&#34;Determine whether the macOS builds have been created.
 
@@ -104,7 +106,7 @@ def find_mac_build(directory: str) -&gt; bool:
     Returns:
         isfile (bool): Whether the macOS ZIP file exists.
     &#34;&#34;&#34;
-    return os.path.isfile(directory + &#34;-mac.zip&#34;)</code></pre>
+    return file_exists(directory=directory, item=&#34;-mac&#34;)</code></pre>
 </details>
 </section>
 <section>
@@ -223,7 +225,8 @@ def file_exists(directory: str = os.getcwd(), item: str = &#39;&#39;) -&gt; Opti
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def find_mac_build(directory: str) -&gt; bool:
+<pre><code class="python">@deprecated(&#34;This function is longer supported.&#34;)
+def find_mac_build(directory: str) -&gt; bool:
     &#34;&#34;&#34;Determine whether the macOS builds have been created.
 
     Args:
@@ -232,7 +235,7 @@ def file_exists(directory: str = os.getcwd(), item: str = &#39;&#39;) -&gt; Opti
     Returns:
         isfile (bool): Whether the macOS ZIP file exists.
     &#34;&#34;&#34;
-    return os.path.isfile(directory + &#34;-mac.zip&#34;)</code></pre>
+    return file_exists(directory=directory, item=&#34;-mac&#34;)</code></pre>
 </details>
 </dd>
 <dt id="renpy_distribute_tools.util.verify_built_files"><code class="name flex">
@@ -256,7 +259,8 @@ directory.</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def verify_built_files(directory: str = os.getcwd()) -&gt; bool:
+<pre><code class="python">@deprecated(&#34;This function is no longer supported.&#34;)
+def verify_built_files(directory: str = os.getcwd()) -&gt; Optional[str]:
     &#34;&#34;&#34;Determine if the Ren&#39;Py distributions have been built already by looking for the `-dists`
         directory.
 
@@ -268,7 +272,7 @@ directory.</p>
     Returns:
         isdir (bool): Whether the directory exists or not.
     &#34;&#34;&#34;
-    return os.path.isdir(directory + &#34;-dists&#34;)</code></pre>
+    return file_exists(directory=directory, item=&#34;-dists&#34;)</code></pre>
 </details>
 </dd>
 </dl>

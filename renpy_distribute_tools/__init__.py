@@ -24,6 +24,7 @@ The Ren'Py Distribution Tools set comes with utilities that make it easy to do t
 - Modifying a visual novel's `Info.plist` with an identifier and copyright field.
 - Code-signing the visual novel binaries in the Mac app with entitlements.
 - Creating a ZIP copy of the Mac app and sending it to Apple's notarization servers.
+- Verifying the status of a notarization request.
 - Stapling the notarization ticket to a macOS app.
 - Publishing content to Itch.io.
 """
@@ -32,6 +33,6 @@ __version__ = '0.4.0'
 from renpy_distribute_tools.fixed_zipfile import ZipFile, MyZipFile
 from renpy_distribute_tools.plist import fix_plist
 from renpy_distribute_tools.apple import package_app_zip, \
-    upload_to_notary, build_pkg, staple, code_sign
+    upload_to_notary, build_pkg, staple, code_sign, check_notary_status
 from renpy_distribute_tools.util import deprecated, file_exists, find_mac_build, verify_built_files
 from renpy_distribute_tools.itch import Butler, ButlerPlatformType, DEFAULT_TAG_RULES
