@@ -1,3 +1,6 @@
+[v0.4.1]
+- Resolve an issue where tags weren't added correctly
+
 [v0.4.0]
 - Marks most functions in util as deprecated
 - Adds new Itch.io tools via Butler, ButlerPlatformType

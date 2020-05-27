@@ -61,7 +61,9 @@ class Butler(object):
         command = [self.bin, file, channel]
 
         if "with_tag_rule" in kwargs:
-            channel += ":" + self.tag_rules.get(kwargs["with_tag_rule"])
+            tag: ButlerPlatformType = self.tag_rules.get(
+                ["with_tag_rule"], ButlerPlatformType.OTHER)
+            channel += ":" + tag.value
 
         if "with_custom_tag" in kwargs:
             channel += "-" + kwargs["with_custom_tag"]

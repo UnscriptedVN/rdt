@@ -28,7 +28,7 @@ The Ren'Py Distribution Tools set comes with utilities that make it easy to do t
 - Stapling the notarization ticket to a macOS app.
 - Publishing content to Itch.io.
 """
-__version__ = '0.4.0'
+__version__ = '0.4.1'
 
 from renpy_distribute_tools.fixed_zipfile import ZipFile, MyZipFile
 from renpy_distribute_tools.plist import fix_plist

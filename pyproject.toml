@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "renpy-distribute-tools"
-version = "0.4.0"
+version = "0.4.1"
 description = "Utilities that make Ren'Py distribution less of a pain in the arse"
 authors = ["Marquis Kurt <software@marquiskurt.net>"]
 homepage = "https://github.com/UnscriptedVN/rdt"
